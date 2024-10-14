@@ -14,7 +14,7 @@ def input_error(func):
         except KeyError:
             return "Enter the phone for the command."
         except IndexError :
-            return "Give me new name and phone please."
+            return "Give me name please."
     return inner
 
 @input_error
@@ -23,19 +23,7 @@ def add_contact(args, contacts):
     contacts[name] = phone
     return "Contact added."
 
-def input_error_change_contact(func):
-    def inner(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except ValueError:
-            return "Give me name and phone please."
-        except KeyError:
-            return "Enter the phone for the command."
-        except IndexError :
-            return "Give me correct name please."
-    return inner
-
-@input_error_change_contact
+@input_error
 def change_contact(args, contacts):
     name, phone = args
     if name in contacts:
@@ -44,19 +32,7 @@ def change_contact(args, contacts):
     else:
         return "Contact not found."    
     
-def input_error_show_phone(func):
-    def inner(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except ValueError:
-            return "Give me name please."
-        except KeyError:
-            return "Check arguments for the command."
-        except IndexError :
-            return "Check arguments for the command."
-    return inner
-
-@input_error_show_phone
+@input_error
 def show_phone(args, contacts):
     name = args[0]
     if name in contacts:
@@ -64,23 +40,9 @@ def show_phone(args, contacts):
     else:
         return "Contact not found." 
 
-def input_error_show_all(func):
-    def inner(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except ValueError:
-            return "Check arguments for the command."
-        except KeyError:
-            return "Check arguments for the command."
-        except IndexError :
-            return "Check arguments for the command."
-    return inner
-
-@input_error_show_all
+@input_error
 def show_all(contacts):
     return contacts;
-
-
 
 def main():
     contacts = {}
