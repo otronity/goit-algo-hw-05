@@ -1,3 +1,4 @@
+import argparse
 from collections import Counter
 
 def load_logs(file_path: str) -> list:
@@ -35,21 +36,19 @@ def display_log_counts(counts: dict):
         print(f'{level.ljust(17)}|{count}')
    
 def main():
-    user_input = input("Enter a command: ")    
-    parts = user_input.split()
-    # перевіряємо передан тільки шлях до файлу чи і рівень логів також
-    if len(parts) < 2:
-        file_path = parts[0]
-        log_level = ''
-    else:
-        file_path, log_level = parts        
+    parser = argparse.ArgumentParser(description="Аналіз лог-файлу за рівнями логування.")
+    parser.add_argument("file_path", help="Шлях до файлу логів")
+    parser.add_argument("log_level", nargs='?', help="Рівень логування (INFO, ERROR, DEBUG), щоб фільтрувати записи", choices=["INFO", "ERROR", "DEBUG", "WARNING"])
+
+    # Отримання аргументів
+    args = parser.parse_args()
         
-    logs = load_logs(file_path)
+    logs = load_logs(args.file_path)
     counts = count_logs_by_level(logs)
     display_log_counts(counts)
-    if log_level != '':
-        print(f"\n Деталі логів для рівня '{log_level.upper()}':")
-        for x in filter_logs_by_level(logs, log_level.upper()):
+    if args.log_level != '':
+        print(f"\n Деталі логів для рівня '{args.log_level}':")
+        for x in filter_logs_by_level(logs, args.log_level):
             print(x)
 
 if __name__ == "__main__":
